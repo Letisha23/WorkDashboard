@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Client Hub</h1>
+        <p>Manage clients & account access links</p>
+      </div>
+      <div class="stats-card">
+        <p class="label">Total clients</p>
+        <h2 id="client-count">0</h2>
+      </div>
+      <div class="notice">
+        <p>Click a client card to open their access link.</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <h2>Dashboard</h2>
+          <p>Overview of client accounts and quick access links.</p>
+        </div>
+        <button id="add-client-btn">+ Add client</button>
+      </header>
+
+      <section class="section">
+        <div class="section-heading">
+          <h3>Clients</h3>
+          <span id="client-status">Loading clients…</span>
+        </div>
+        <div id="client-grid" class="client-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-panel">
+      <button id="modal-close" class="close-btn">×</button>
+      <h3>Add new client</h3>
+      <form id="client-form">
+        <label>
+          Client name
+          <input type="text" id="client-name" placeholder="e.g. Acme Corp" required />
+        </label>
+        <label>
+          Account ID
+          <input type="text" id="account-id" placeholder="e.g. 7265486" required />
+        </label>
+        <button type="submit" class="primary-btn">Save client</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
