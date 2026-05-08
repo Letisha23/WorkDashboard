@@ -1,10 +1,5 @@
 const STORAGE_KEY = 'clientDashboardClients';
-const defaultClients = [
-  { name: 'Acme Corp', accountId: '7265486' },
-  { name: 'Brightfield Labs', accountId: '4721284' },
-  { name: 'Crescent Finance', accountId: '3819052' },
-  { name: 'Delta Healthcare', accountId: '7265486' },
-];
+const defaultClients = [];
 
 function loadClients() {
   const saved = localStorage.getItem(STORAGE_KEY);
