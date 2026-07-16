@@ -85,6 +85,14 @@ async function loadClientsFromDatabase() {
 }
 
 async function persistClientsToDatabase(items) {
+  // Always save to localStorage first so the UI sees persisted data immediately.
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  } catch (e) {
+    console.warn('Unable to write to localStorage', e);
+  }
+
+  // Attempt to persist to IndexedDB; do not fail the operation if this errors.
   try {
     const db = await openDatabase();
     await new Promise((resolve, reject) => {
@@ -97,11 +105,8 @@ async function persistClientsToDatabase(items) {
       transaction.oncomplete = () => resolve();
       transaction.onerror = () => reject(transaction.error);
     });
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   } catch (error) {
-    console.warn('Unable to persist to IndexedDB. Saving locally instead.', error);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    console.warn('Unable to persist to IndexedDB (non-fatal)', error);
   }
 }
 
