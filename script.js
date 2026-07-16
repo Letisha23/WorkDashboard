@@ -176,12 +176,11 @@ clientForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const nameInput = document.getElementById('client-name');
   const accountInput = document.getElementById('account-id');
-  const regionInput = document.getElementById('client-region');
 
   const newClient = {
     name: nameInput.value,
     accountId: accountInput.value,
-    region: regionInput.value,
+    region: '',
   };
 
   if (!newClient.name.trim() || !newClient.accountId.trim()) return;
