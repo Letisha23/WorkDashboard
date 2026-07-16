@@ -23,18 +23,22 @@
     </aside>
 
     <main class="main-content">
+      <nav class="top-nav" role="navigation" aria-label="Main">
+        <a href="index.html" class="tab active">Dashboard</a>
+        <a href="notes.html" class="tab">Notes</a>
+      </nav>
       <header class="topbar">
         <div>
           <h2>Dashboard</h2>
           <p>Overview of client accounts and quick access links.</p>
         </div>
-        <button id="add-client-btn">+ Add client</button>
+        <button id="add-client-btn" class="primary-btn">+ Add client</button>
       </header>
 
       <section class="section">
         <div class="section-heading">
           <h3>Clients</h3>
-          <span id="client-status">Loading clients…</span>
+          <span id="client-status" class="muted-chip">Loading clients…</span>
         </div>
         <div id="client-grid" class="client-grid"></div>
       </section>
@@ -42,9 +46,9 @@
   </div>
 
   <div id="modal" class="modal hidden">
-    <div class="modal-panel">
+      <div class="modal-panel">
       <button id="modal-close" class="close-btn">×</button>
-      <h3>Add new client</h3>
+      <h3 id="modal-title">Add new client</h3>
       <form id="client-form">
         <label>
           Client name
@@ -53,6 +57,17 @@
         <label>
           Account ID
           <input type="text" id="account-id" placeholder="e.g. 7265486" required />
+        </label>
+        <label>
+          Region
+          <select id="client-region">
+            <option value="">Unassigned</option>
+            <option value="SEA">SEA</option>
+            <option value="AU">AU</option>
+            <option value="APAC">APAC</option>
+            <option value="NA">NA</option>
+            <option value="EU">EU</option>
+          </select>
         </label>
         <button type="submit" class="primary-btn">Save client</button>
       </form>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Notes</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Client Hub</h1>
+        <p>Keep your client updates organized in one place.</p>
+      </div>
+      <div class="stats-card">
+        <p class="label">Notes saved</p>
+        <h2 id="notes-saved-count">0</h2>
+      </div>
+      <div class="notice">
+        <p>Capture the latest updates for each client.</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <nav class="top-nav" role="navigation" aria-label="Main">
+        <a href="index.html" class="tab">Dashboard</a>
+        <a href="notes.html" class="tab active">Notes</a>
+      </nav>
+
+      <header class="topbar">
+        <div>
+          <h2>Client notes</h2>
+          <p>Review latest client updates.</p>
+        </div>
+        <button id="add-note-btn" class="primary-btn" type="button">+ Add note</button>
+      </header>
+
+      <section class="section">
+        <div class="section-heading">
+          <h3>Recent notes</h3>
+          <span id="notes-count" class="muted-chip">0 notes</span>
+        </div>
+        <div class="notes-columns">
+          <div class="region-column">
+            <h4>AU</h4>
+            <div id="notes-list-au" class="notes-list"></div>
+          </div>
+          <div class="region-column">
+            <h4>SEA</h4>
+            <div id="notes-list-sea" class="notes-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="note-modal" class="modal hidden">
+    <div class="modal-panel">
+      <button id="note-modal-close" class="close-btn" type="button">×</button>
+      <h3>Add new note</h3>
+      <form id="notes-form" class="note-form">
+        <label>
+          Client name
+          <input type="text" id="client-name" placeholder="e.g. Acme Corp" required />
+        </label>
+        <div class="form-row">
+          <label>
+            CSM
+            <select id="note-csm" required>
+              <option value="">Select CSM</option>
+              <option value="Aurelie">Aurelie</option>
+              <option value="Destiny">Destiny</option>
+              <option value="Emily">Emily</option>
+              <option value="Gina">Gina</option>
+              <option value="Hayley">Hayley</option>
+              <option value="Kaye">Kaye</option>
+              <option value="Khalisha">Khalisha</option>
+              <option value="Simone">Simone</option>
+            </select>
+          </label>
+        </div>
+          
+        <div class="form-row">
+          <label>
+            Region
+            <select id="note-region" required>
+              <option value="">Select region</option>
+              <option value="AU">AU</option>
+              <option value="SEA">SEA</option>
+            </select>
+          </label>
+        </div>
+        
+        <label>
+          Note
+          <textarea id="note-content" rows="6" placeholder="Write your client update here..." required></textarea>
+        </label>
+        <label>
+          Updated on
+          <input type="date" id="note-date" />
+        </label>
+        <button type="submit" class="primary-btn">Save note</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="notes.js"></script>
+</body>
+</html>
