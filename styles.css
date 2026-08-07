@@ -88,6 +88,46 @@ button {
   color: var(--muted);
 }
 
+.clients-panel {
+  background: rgba(244, 143, 177, 0.06);
+  border: 1px solid rgba(244, 143, 177, 0.12);
+  border-radius: 20px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.clients-panel h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.client-sidebar-list {
+  display: grid;
+  gap: 8px;
+}
+
+.client-sidebar-item {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.9);
+  color: var(--text);
+  border: 1px solid rgba(244, 143, 177, 0.14);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.client-sidebar-item.active {
+  background: rgba(244, 143, 177, 0.16);
+  border-color: rgba(244, 143, 177, 0.3);
+  font-weight: 700;
+}
+
+.client-sidebar-item:hover {
+  background: rgba(244, 143, 177, 0.1);
+}
+
 .main-content {
   display: flex;
   flex-direction: column;
@@ -156,11 +196,6 @@ button {
   appearance: none;
   font: inherit;
   color: var(--text);
-  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
-  background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px);
-  background-size: 6px 6px, 6px 6px;
-  background-repeat: no-repeat;
-}
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
   background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px);
   background-size: 6px 6px, 6px 6px;
@@ -504,6 +539,122 @@ button {
   line-height: 1.6;
 }
 
+.page-content {
+  padding: 24px;
+}
+
+.card {
+  background: rgba(250, 250, 250, 0.96);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 24px;
+  padding: 24px;
+  max-width: 760px;
+  margin: 0 auto;
+  box-shadow: 0 14px 36px rgba(10, 10, 10, 0.05);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+}
+
+/* .checklist-card and .notes-card also carry the base .card class, which
+   sets `max-width: 760px; margin: 0 auto;` for use on other pages (e.g. a
+   single centered form card). That cap was overriding the intent here —
+   these two cards should stretch to fill their content-grid column on
+   desktop instead of being capped at a fixed pixel width. min-width: 0 is
+   also needed so long unbroken text/checklist content can't force the
+   grid column wider than the container (a common grid-overflow gotcha). */
+.checklist-card {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+}
+
+.notes-card {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+}
+
+.notes-form {
+  display: grid;
+  gap: 12px;
+}
+
+.notes-form textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 180px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(244, 143, 177, 0.2);
+  background: rgba(244, 143, 177, 0.03);
+  color: var(--text);
+  font: inherit;
+}
+
+.notes-form label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.card-header h2 {
+  margin: 0 0 6px;
+}
+
+.subtitle {
+  margin: 0 0 18px;
+  color: var(--muted);
+}
+
+.checklist-summary {
+  margin-bottom: 16px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.checklist {
+  display: grid;
+  gap: 12px;
+}
+
+.task {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid rgba(244, 143, 177, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.task input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.task label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-title {
+  font-weight: 700;
+}
+
+.description {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 .note-footer {
   display: flex;
   justify-content: space-between;
@@ -527,7 +678,7 @@ button {
     grid-template-columns: 1fr;
   }
 
-  .notes-layout {
+  .content-grid {
     grid-template-columns: 1fr;
   }
 }

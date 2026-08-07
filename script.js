@@ -1,11 +1,18 @@
 const STORAGE_KEY = 'clientDashboardClients';
-const DB_NAME = 'clientDashboardDB';
-const DB_VERSION = 1;
 const STORE_NAME = 'clients';
+
+// NOTE: the IndexedDB connection is opened once, in client-state.js, via
+// global.openSharedDatabase(). Do not open a separate connection at a
+// separate version number here. This file previously opened
+// 'clientDashboardDB' at version 1 while checklist.js/notes.js opened it
+// at version 2 — since IndexedDB has one real on-disk version per
+// database name across the whole origin, whichever page loaded first won,
+// and every other script requesting a different (often lower) version
+// got a hard VersionError on open. Make sure client-state.js is loaded on
+// this page before this script, the same way progress.html does it.
 
 const defaultClients = [];
 let clients = [];
-let dbPromise = null;
 
 const clientGrid = document.getElementById('client-grid');
 const clientCount = document.getElementById('client-count');
@@ -31,32 +38,6 @@ function createClientRecord({ name, accountId, region }) {
   };
 }
 
-function openDatabase() {
-  if (dbPromise) return dbPromise;
-
-  dbPromise = new Promise((resolve, reject) => {
-    if (!('indexedDB' in window)) {
-      reject(new Error('IndexedDB is not supported in this browser.'));
-      return;
-    }
-
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-
-    request.onupgradeneeded = (event) => {
-      const database = event.target.result;
-      if (!database.objectStoreNames.contains(STORE_NAME)) {
-        const store = database.createObjectStore(STORE_NAME, { keyPath: 'id' });
-        store.createIndex('by-accountId', 'accountId', { unique: true });
-      }
-    };
-
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
-  });
-
-  return dbPromise;
-}
-
 function loadFallbackClients() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (!saved) return defaultClients;
@@ -71,7 +52,7 @@ function loadFallbackClients() {
 
 async function loadClientsFromDatabase() {
   try {
-    const db = await openDatabase();
+    const db = await openSharedDatabase();
     return await new Promise((resolve, reject) => {
       const transaction = db.transaction(STORE_NAME, 'readonly');
       const request = transaction.objectStore(STORE_NAME).getAll();
@@ -94,7 +75,7 @@ async function persistClientsToDatabase(items) {
 
   // Attempt to persist to IndexedDB; do not fail the operation if this errors.
   try {
-    const db = await openDatabase();
+    const db = await openSharedDatabase();
     await new Promise((resolve, reject) => {
       const transaction = db.transaction(STORE_NAME, 'readwrite');
       const store = transaction.objectStore(STORE_NAME);
@@ -124,6 +105,8 @@ async function deleteClient(clientId) {
 }
 
 function renderClients() {
+  if (!clientGrid || !clientCount || !clientStatus) return;
+
   clientGrid.innerHTML = '';
   clientCount.textContent = clients.length;
   clientStatus.textContent = `${clients.length} clients loaded`;
@@ -171,33 +154,40 @@ function closeModal() {
   clientForm.reset();
 }
 
-addClientBtn.addEventListener('click', openModal);
-modalClose.addEventListener('click', closeModal);
-modal.addEventListener('click', (event) => {
-  if (event.target === modal) closeModal();
-});
+if (addClientBtn) addClientBtn.addEventListener('click', openModal);
+if (modalClose) modalClose.addEventListener('click', closeModal);
+if (modal) {
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) closeModal();
+  });
+}
 
-clientForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const nameInput = document.getElementById('client-name');
-  const accountInput = document.getElementById('account-id');
+if (clientForm) {
+  clientForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const nameInput = document.getElementById('client-name');
+    const accountInput = document.getElementById('account-id');
 
-  const newClient = {
-    name: nameInput.value,
-    accountId: accountInput.value,
-    region: '',
-  };
+    const newClient = {
+      name: nameInput.value,
+      accountId: accountInput.value,
+      region: '',
+    };
 
-  if (!newClient.name.trim() || !newClient.accountId.trim()) return;
+    if (!newClient.name.trim() || !newClient.accountId.trim()) return;
 
-  await addClient(newClient);
-  closeModal();
-});
+    await addClient(newClient);
+    closeModal();
+  });
+}
 
 async function initializeApp() {
+  if (!clientGrid || !clientCount || !clientStatus) return;
+
   clientStatus.textContent = 'Loading clients…';
   clients = await loadClientsFromDatabase();
   renderClients();
 }
 
-initializeApp();
+document.addEventListener('DOMContentLoaded', initializeApp);
+window.addEventListener('pageshow', initializeApp);
