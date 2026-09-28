@@ -234,8 +234,11 @@ button {
   border: 1px solid transparent;
   transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
 }
-.top-nav .tab:hover {
+.top-nav .tab:hover:not(.unavailable) {
   transform: translateY(-1px);
+}
+.top-nav .tab.unavailable {
+  cursor: not-allowed;
 }
 .top-nav .tab.active {
   background: var(--accent);
